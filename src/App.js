@@ -2,9 +2,12 @@ import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
 
-let sample_article = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']
-//	{"title": "title_value", "author": "author_value"},
-//	{"title": "title_value1", "author": "author_value1"}
+let sample_article = [
+	{"title": "title_value", "description": "description"},
+	{"title": "title_value1", "description": "description"},
+{"title": "title_value", "description": "description"},
+	{"title": "title_value1", "description": "description"}
+         ]
 
 
 class App extends Component {
@@ -17,7 +20,6 @@ class App extends Component {
   }
   handleClick(e){
     this.setState({currentPage: Number(e.target.id)})
-    console.log(this.state)
   }
 
   render () {
@@ -30,7 +32,16 @@ class App extends Component {
 	  
    const currentArticles = articles.slice(indexOfFirstPage, indexOfLastPage)
    
-   const renderedArticles = currentArticles.map((article, index) => {return (<li key={index}>{article}</li>)})
+   const renderedArticles = currentArticles.map((article, index) => {return (
+	   <div key={index}>
+	<li>
+	   <ul>
+	   <li >{article.title}</li>
+  	<li> {article.description}</li> 
+	   </ul>
+	   </li>
+  	</div>									 
+   									);})
 
    // Logic for displaying page numbers
 
