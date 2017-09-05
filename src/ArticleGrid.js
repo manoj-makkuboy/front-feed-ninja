@@ -4,7 +4,8 @@ import './App.css'
 
 async function getArticles (bindedSetState) {
   try {
-    let response = await fetch('http://localhost:8000/feed_ninja/articles', {mode: 'cors'})
+    let init = { mode: 'cors', headers: { Authorization: ('JWT ' + localStorage.getItem('JWT')) } }
+    let response = await fetch('http://localhost:8000/feed_ninja/articles', init)
     bindedSetState({articles: await response.json()})
   } catch (error) {
     console.error(error)

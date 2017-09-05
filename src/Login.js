@@ -16,8 +16,8 @@ async function loginUser (bindedSetState, username, password) {
     let responseJson = await response.json()
     if (response.ok) {
       let jwtToken = responseJson['token']
-      bindedSetState({ jwt: jwtToken })
       localStorage.setItem('JWT', jwtToken)
+      bindedSetState({ jwt: jwtToken })
     } else {
       console.log('User Authentication Failed')
     }
