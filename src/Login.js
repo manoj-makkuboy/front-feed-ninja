@@ -49,9 +49,16 @@ class Login extends Component {
     })
   }
 
+  logoutUser () {
+    localStorage.removeItem('JWT')
+
+    console.log(this,'user logout succesful')
+    this.setState({ jwt: null })
+  }
+
   render () {
     if (this.state.jwt) {
-      return (<ArticleGrid />)
+      return (<ArticleGrid logoutFunction={this.logoutUser.bind(this)} />)
     }
     return (
       <form onSubmit={this.handleSubmit}>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
-import Logout from './Logout'
 
 async function getArticles (bindedSetState) {
   try {
@@ -74,7 +73,7 @@ class ArticleGrid extends Component {
    )
     return (<div>
       <div>
-        <Logout />
+        <button onClick={this.props.logoutFunction}> Logout </button>
       </div>
       <ul>
         {renderedArticles}
