@@ -7,6 +7,7 @@ import Login from './Login.js'
 class App extends Component {
   constructor () {
     super()
+    this.state = { isLoggedIn: false }
   /*  this.state = {
       articles: [],
       currentPage: 1,
@@ -15,9 +16,15 @@ class App extends Component {
   }
 
   render () {
-    return (
-      <Login />
-    )
+    if (this.state.isLoggedIn) {
+      return (
+        <ArticleGrid />
+      )
+    } else {
+      return (
+        <Login />
+      )
+    }
   }
 }
 
