@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ArticleGrid from './ArticleGrid.js'
 
 async function sendUserCredentials (bindedSetState, username, password) {
   let init = {
@@ -12,10 +13,14 @@ async function sendUserCredentials (bindedSetState, username, password) {
   }
   try {
     let response = await fetch('http://localhost:8000/rest-auth/login/', init)
-    let jwtToken = await response.json()
-    jwtToken = jwtToken['token']
-    bindedSetState({ jwt: jwtToken })
-    localStorage.setItem('JWT', jwtToken)
+    let responseJson = await response.json()
+    if (response.ok) {
+      let jwtToken = responseJson['token']
+      bindedSetState({ jwt: jwtToken })
+      localStorage.setItem('JWT', jwtToken)
+    } else {
+      console.log('User Authentication Failed')
+    }
   } catch (error) {
     console.error(error)
   }
@@ -23,14 +28,13 @@ async function sendUserCredentials (bindedSetState, username, password) {
 class Login extends Component {
   constructor () {
     super()
-    this.state = {username: '', password: '', jwt: ''}
+    this.state = {username: '', password: '', jwt: null}
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
   }
 
   handleSubmit (event) {
-    console.log(this.state)
     event.preventDefault()
     sendUserCredentials(this.setState.bind(this), this.state.username, this.state.password)
   }
@@ -42,10 +46,12 @@ class Login extends Component {
     this.setState({
       [name]: value
     })
-    console.log(name)
   }
 
   render () {
+    if (this.state.jwt !== null) {
+      return (<ArticleGrid />)
+    }
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
