@@ -25,6 +25,7 @@ async function sendUserCredentials (bindedSetState, username, password) {
     console.error(error)
   }
 }
+
 class Login extends Component {
   constructor () {
     super()
@@ -49,7 +50,7 @@ class Login extends Component {
   }
 
   render () {
-    if (this.state.jwt !== null) {
+    if (this.state.jwt) {
       return (<ArticleGrid />)
     }
     return (
