@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ArticleGrid from './ArticleGrid.js'
 
-async function sendUserCredentials (bindedSetState, username, password) {
+async function loginUser (bindedSetState, username, password) {
   let init = {
     mode: 'cors',
     headers: {
@@ -37,7 +37,7 @@ class Login extends Component {
 
   handleSubmit (event) {
     event.preventDefault()
-    sendUserCredentials(this.setState.bind(this), this.state.username, this.state.password)
+    loginUser(this.setState.bind(this), this.state.username, this.state.password)
   }
 
   handleInputChange (event) {
