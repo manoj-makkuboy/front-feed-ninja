@@ -4,7 +4,7 @@ import './App.css'
 
 async function getArticles (bindedSetState) {
   try {
-    let response = await fetch('http://localhost:8000/feed_ninja/articles?page=1', {mode: 'cors'})
+    let response = await fetch('http://localhost:8000/feed_ninja/articles', {mode: 'cors'})
     bindedSetState({articles: await response.json()})
   } catch (error) {
     console.error(error)
@@ -17,7 +17,7 @@ class ArticleGrid extends Component {
     this.state = {
       articles: [],
       currentPage: 1,
-      articlesPerPage: 3
+      articlesPerPage: 10
     }
     this.handleClick = this.handleClick.bind(this)
   }
