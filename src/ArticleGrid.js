@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
+import UserProfile from './UserProfile'
 
 async function getArticles (bindedSetState) {
   try {
@@ -18,7 +19,9 @@ class ArticleGrid extends Component {
     this.state = {
       articles: [],
       currentPage: 1,
-      articlesPerPage: 10
+      articlesPerPage: 10,
+
+      currentScreen: 'Articles'
     }
     this.handleClick = this.handleClick.bind(this)
   }
@@ -36,54 +39,63 @@ class ArticleGrid extends Component {
    */
   }
 
+  changeStateOfCurrentScreen (screenName) {
+    this.setState({currentScreen: screenName})
+  }
+
   render () {
-    const articles = this.state.articles
-    const currentPage = this.state.currentPage
-    const articlesPerPage = this.state.articlesPerPage
-
-    const indexOfLastElement = currentPage * articlesPerPage
-    const indexOfFirstElement = indexOfLastElement - articlesPerPage
-    const currentArticles = articles.slice(indexOfFirstElement, indexOfLastElement)
-
-    const renderedArticles = currentArticles.map((article, index) => {
-      return (
-        <div key={index}>
-          <li>
-            <ul>
-              <li >{article.title}</li>
-              <li> {article.description}</li>
-            </ul>
-          </li>
+    if (this.state.currentScreen === 'Articles') {
+      const articles = this.state.articles
+      const currentPage = this.state.currentPage
+      const articlesPerPage = this.state.articlesPerPage
+  
+      const indexOfLastElement = currentPage * articlesPerPage
+      const indexOfFirstElement = indexOfLastElement - articlesPerPage
+      const currentArticles = articles.slice(indexOfFirstElement, indexOfLastElement)
+  
+      const renderedArticles = currentArticles.map((article, index) => {
+        return (
+          <div key={index}>
+            <li>
+              <ul>
+                <li >{article.title}</li>
+                <li> {article.description}</li>
+              </ul>
+            </li>
+          </div>
+        )
+      })
+  
+     // Logic for displaying page numbers
+  
+      const pageNumbers = []
+      for (let i = 1; i <= Math.ceil(articles.length / articlesPerPage); i++) {
+        pageNumbers.push(i)
+      }
+  
+      const renderedPageNumbers = pageNumbers.map(number => {
+        return (
+          <li key={number} id={number} onClick={this.handleClick}>
+            {number}
+          </li>)
+      }
+     )
+      return (<div>
+        <div>
+          <button onClick={this.props.logoutFunction}> Logout </button>
+          <button onClick={() => { this.changeStateOfCurrentScreen('preference') }}> Preference </button>
         </div>
-      )
-    })
-
-   // Logic for displaying page numbers
-
-    const pageNumbers = []
-    for (let i = 1; i <= Math.ceil(articles.length / articlesPerPage); i++) {
-      pageNumbers.push(i)
-    }
-
-    const renderedPageNumbers = pageNumbers.map(number => {
-      return (
-        <li key={number} id={number} onClick={this.handleClick}>
-          {number}
-        </li>)
-    }
-   )
-    return (<div>
-      <div>
-        <button onClick={this.props.logoutFunction}> Logout </button>
+        <ul>
+          {renderedArticles}
+        </ul>
+  
+        {renderedPageNumbers}
+  
       </div>
-      <ul>
-        {renderedArticles}
-      </ul>
-
-      {renderedPageNumbers}
-
-    </div>
-    )
+      )
+    } else if (this.state.currentScreen === 'preference') {
+      return (<UserProfile goBackFn={this.changeStateOfCurrentScreen.bind(this)} />)
+    }
   }
 }
 
