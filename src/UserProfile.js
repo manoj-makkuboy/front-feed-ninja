@@ -25,7 +25,6 @@ class UserProfile extends Component {
     .then(function (response) { return response.json() })
     .then(function (responseJson) {
       bindedSetStateOfCategories(responseJson['category_list'])
-      console.log(responseJson['category_list'])
     })
   }
 
@@ -41,6 +40,30 @@ class UserProfile extends Component {
   }
   handleSubmit (e) {
     console.log(this.state)
+    // Payload prep
+    let categoryCheckbox = this.state.categoryCheckbox
+    let categoryArray = []
+    for (let category in categoryCheckbox) {
+      if (categoryCheckbox[category] === true) {
+        categoryArray.push(category)
+      }
+    }
+    let categoriesObj = {categories: categoryArray} // suitable format the backend accepts
+    // preparing the request
+    let init = {
+      mode: 'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: ('JWT ' + localStorage.getItem('JWT'))
+      },
+      method: 'POST',
+      body: JSON.stringify(categoriesObj)
+    }
+    fetch('http://localhost:8000/custom-user/update-category', init)
+    .then(function (response) { return response.json() })
+    .then(function (responseJson) { console.log(responseJson) })
+ 
     e.preventDefault()
   }
 
