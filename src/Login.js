@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ArticleGrid from './ArticleGrid.js'
+import Dialog from 'material-ui/Dialog'
 
 async function loginUser (bindedSetState, username, password) {
   let init = {
@@ -18,9 +19,9 @@ async function loginUser (bindedSetState, username, password) {
       let jwtToken = responseJson['token']
       localStorage.setItem('JWT', jwtToken)
       bindedSetState({ jwt: jwtToken })
-    } else {
-      console.log('User Authentication Failed')
+      return true
     }
+    return false
   } catch (error) {
     console.error(error)
   }
@@ -29,7 +30,7 @@ async function loginUser (bindedSetState, username, password) {
 class Login extends Component {
   constructor () {
     super()
-    this.state = {username: '', password: '', jwt: null}
+    this.state = {username: '', password: '', jwt: null, authFailed: false}
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -37,7 +38,9 @@ class Login extends Component {
 
   handleSubmit (event) {
     event.preventDefault()
-    loginUser(this.setState.bind(this), this.state.username, this.state.password)
+    if (loginUser(this.setState.bind(this), this.state.username, this.state.password) === false) {
+      console.log('User Authentication Failed')
+    }
   }
 
   handleInputChange (event) {
@@ -61,6 +64,7 @@ class Login extends Component {
       return (<ArticleGrid logoutFunction={this.logoutUser.bind(this)} />)
     }
     return (
+
       <form onSubmit={this.handleSubmit}>
         <label>
           username :

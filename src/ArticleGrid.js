@@ -1,7 +1,45 @@
 import React, { Component } from 'react'
 import logo from './logo.svg'
-import './App.css'
 import UserProfile from './UserProfile'
+
+const articleDataGridTitleCss = {
+  borderBottom: '3px solid red',
+  textDecoration: 'none'
+}
+const pageNumberLiCss = {
+  color: 'blue',
+  userSelect: 'none',
+  cursor: 'pointer',
+  listStylePosition: 'inside',
+  border: '1px solid black'
+}
+
+const pageNumberUlCss = {
+  position: 'absolute',
+  height: '20px',
+  width: '400px',
+  margin: 'auto',
+  left: '40%',
+  listStyle: 'none',
+  display: 'flex'
+}
+
+const articleLiCss = {
+  fontSize: 'medium',
+  listStyle: 'none',
+  borderRadius: '25px',
+  background: '#DCDCDC',
+  padding: '20px'
+}
+
+const articleDataGridCss = {
+}
+const articleDataGridDescriptionCss = {
+  fontSize: 'x-small'
+}
+const articleUlCss = {
+}
+
 
 async function getArticles (bindedSetState) {
   try {
@@ -56,28 +94,24 @@ class ArticleGrid extends Component {
       const renderedArticles = currentArticles.map((article, index) => {
         return (
           <div key={index}>
-            <li>
-              <ul>
-                <li >{article.title}</li>
-                <li> {article.description}</li>
-              </ul>
+            <li style={articleLiCss}>
+              <a style={articleDataGridTitleCss} target='_blank' href={article.link}>{article.title}</a>
+              <p style={articleDataGridDescriptionCss}>{article.description}</p>
             </li>
           </div>
         )
       })
-  
      // Logic for displaying page numbers
-  
       const pageNumbers = []
       for (let i = 1; i <= Math.ceil(articles.length / articlesPerPage); i++) {
         pageNumbers.push(i)
       }
-  
       const renderedPageNumbers = pageNumbers.map(number => {
         return (
-          <li key={number} id={number} onClick={this.handleClick}>
+          <li id={number} onClick={this.handleClick} style={pageNumberLiCss}>
             {number}
-          </li>)
+          </li>
+        )
       }
      )
       return (<div>
@@ -85,12 +119,15 @@ class ArticleGrid extends Component {
           <button onClick={this.props.logoutFunction}> Logout </button>
           <button onClick={() => { this.changeStateOfCurrentScreen('preference') }}> Preference </button>
         </div>
-        <ul>
-          {renderedArticles}
-        </ul>
-  
-        {renderedPageNumbers}
-  
+
+        <div style={articleDataGridCss}>
+          <ul style={articleUlCss}>
+            {renderedArticles}
+          </ul>
+          <ul id='page-number-footer' style={pageNumberUlCss}>
+            {renderedPageNumbers}
+          </ul>
+        </div>
       </div>
       )
     } else if (this.state.currentScreen === 'preference') {
